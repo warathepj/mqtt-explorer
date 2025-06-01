@@ -10,11 +10,13 @@
 </head>
 <body>
     <h1>MQTT Messages via WebSocket</h1>
+    <input type="text" id="topicInput" placeholder="Enter topic to subscribe via HTTP">
+    <button id="subscribeButton">Subscribe via HTTP</button>
     <div id="messages"></div>
 
     <script>
         const messagesDiv = document.getElementById('messages');
-        const ws = new WebSocket('ws://localhost:8080');
+        const ws = new WebSocket('ws://localhost:8083');
 
         ws.onopen = () => {
             console.log('Connected to WebSocket server');
@@ -37,6 +39,33 @@
             console.error('WebSocket error:', error);
             messagesDiv.innerHTML += `<div class="message" style="color: red;">WebSocket error: ${error.message}</div>`;
         };
+
+        // HTTP Subscription functionality
+        const topicInput = document.getElementById('topicInput');
+        const subscribeButton = document.getElementById('subscribeButton');
+
+        subscribeButton.addEventListener('click', async () => {
+            const topic = topicInput.value;
+            if (topic) {
+                try {
+                    const response = await fetch('/subscribe', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ topic: topic })
+                    });
+                    const result = await response.text();
+                    messagesDiv.innerHTML += `<div class="message">Subscription request sent for topic: ${topic}. Server response: ${result}</div>`;
+                    topicInput.value = ''; // Clear input after sending
+                } catch (error) {
+                    console.error('Error subscribing via HTTP:', error);
+                    messagesDiv.innerHTML += `<div class="message" style="color: red;">Error subscribing via HTTP: ${error.message}</div>`;
+                }
+            } else {
+                messagesDiv.innerHTML += `<div class="message" style="color: orange;">Please enter a topic for HTTP subscription.</div>`;
+            }
+        });
     </script>
 </body>
 </html>

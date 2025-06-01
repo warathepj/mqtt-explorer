@@ -4,11 +4,11 @@ const client = mqtt.connect('mqtt://localhost:1883');
 client.on('connect', () => {
   console.log('Connected to MQTT broker');
   setInterval(() => {
-    client.publish('topic/test', 'hello', (err) => {
+    client.publish('topic/test1', 'hello', (err) => {
       if (err) {
         console.error('Failed to publish message:', err);
       } else {
-        console.log('Message "hello" published to topic "topic/test"');
+        console.log('Message "hello" published to topic "topic/test1"');
       }
     });
   }, 5000); // 5000 milliseconds = 5 seconds
