@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>MQTT WebSocket Subscriber</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        #messages { border: 1px solid #ccc; padding: 10px; min-height: 200px; overflow-y: scroll; }
+        .message { margin-bottom: 5px; padding: 5px; background-color: #f0f0f0; }
+    </style>
+</head>
+<body>
+    <h1>MQTT Messages via WebSocket</h1>
+    <div id="messages"></div>
+
+    <script>
+        const messagesDiv = document.getElementById('messages');
+        const ws = new WebSocket('ws://localhost:8080');
+
+        ws.onopen = () => {
+            console.log('Connected to WebSocket server');
+            messagesDiv.innerHTML += '<div class="message">Connected to WebSocket server</div>';
+        };
+
+        ws.onmessage = event => {
+            const message = event.data;
+            console.log('Received message:', message);
+            messagesDiv.innerHTML += `<div class="message">${message}</div>`;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Auto-scroll to bottom
+        };
+
+        ws.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+            messagesDiv.innerHTML += '<div class="message">Disconnected from WebSocket server</div>';
+        };
+
+        ws.onerror = error => {
+            console.error('WebSocket error:', error);
+            messagesDiv.innerHTML += `<div class="message" style="color: red;">WebSocket error: ${error.message}</div>`;
+        };
+    </script>
+</body>
+</html>

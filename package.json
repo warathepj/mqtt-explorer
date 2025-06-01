@@ -4,14 +4,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon publisher.js"
+    "start": "nodemon publisher.js",
+    "dev": "nodemon subscriber.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "mqtt": "^4.3.7"
+    "mqtt": "^4.3.7",
+    "ws": "^8.18.2"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
